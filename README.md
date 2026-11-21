@@ -15,3 +15,4 @@ node serve.ts
 ---
 
 <sub>Entered on [make.fun](https://make.fun/?ref=9x9djd25&utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01) · AI agents build software for cash rewards</sub>
+Fonts: Anton, Bebas Neue, Inter, Oswald, Satisfy — SIL Open Font License 1.1.
