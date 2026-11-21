@@ -3,70 +3,73 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111315">
-  <title>Sunset Reel — Cover Studio</title>
-  <link rel="stylesheet" href="/style.css">
+  <meta name="theme-color" content="#111014">
+  <title>SUNSET REEL — Cover Studio</title>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="/" aria-label="Sunset Reel home"><span class="brand-mark">SR</span><span><b>SUNSET REEL</b><small>COVER STUDIO</small></span></a>
-    <nav class="steps" aria-label="Workflow"><span class="active"><i>1</i> Add photos</span><b>→</b><span><i>2</i> Caption</span><b>→</b><span><i>3</i> Export PNG</span></nav>
-    <div class="top-actions"><button id="undoBtn" class="icon-button" title="Undo (Ctrl/⌘ Z)" aria-label="Undo">↶</button><button id="redoBtn" class="icon-button" title="Redo (Ctrl/⌘ Shift Z)" aria-label="Redo">↷</button><button id="helpBtn" class="icon-button help-button" title="Keyboard shortcuts (?)">?</button></div>
-  </header>
-  <main class="workspace">
-    <aside class="sidebar">
-      <section class="panel-section photo-section">
-        <div class="section-heading"><div><span class="eyebrow">YOUR CAST</span><h1>Photos</h1></div><span id="photoCount" class="count-pill">8 ready</span></div>
-        <label class="upload-drop" id="uploadDrop"><input id="photoInput" type="file" accept="image/*" multiple><span class="upload-icon">＋</span><b>Drop photos or browse</b><small>JPG, PNG, WebP · stays on this device</small></label>
-        <div class="button-row"><button id="loadSamplesBtn" class="button quiet">Load samples</button><button id="autoFillBtn" class="button quiet">Auto-fill panels</button></div>
-        <div class="thumb-strip" id="thumbStrip" aria-label="Loaded photos"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="?shot=editor" aria-label="Sunset Reel cover studio home">
+        <span class="brand-mark">SR</span><span><b>SUNSET REEL</b><small>COVER STUDIO</small></span>
+      </a>
+      <nav class="workflow" aria-label="Studio steps">
+        <span class="step active"><i>1</i>Add photos</span><b></b><span class="step"><i>2</i>Caption</span><b></b><span class="step"><i>3</i>Export PNG</span>
+      </nav>
+      <div class="top-actions"><button id="undo" class="icon-button" title="Undo" aria-label="Undo">↶</button><button id="redo" class="icon-button" title="Redo" aria-label="Redo">↷</button><button id="help" class="icon-button help-button" title="Keyboard shortcuts" aria-label="Keyboard shortcuts">?</button></div>
+    </header>
+
+    <main class="studio-grid">
+      <aside class="rail photos-rail">
+        <div class="section-heading"><span class="eyebrow">01 / THE CAST</span><h1>Photos</h1><span id="photoCount" class="count-badge">8</span></div>
+        <div id="photoDrop" class="dropzone"><span class="upload-icon">＋</span><b>Drop your photos here</b><small>or browse from this device</small><button id="addPhotos" class="button button-light">Add photos</button><input id="fileInput" type="file" accept="image/*" multiple hidden></div>
+        <div class="photo-actions"><button id="loadSamples" class="button button-quiet">Load samples</button><button id="autoFill" class="button button-quiet">Auto-fill panels</button></div>
+        <div class="tray-heading"><span>YOUR PHOTO TRAY</span><span>LOCAL ONLY</span></div>
+        <div id="sampleStrip" class="photo-tray" aria-label="All sample and uploaded photos"></div>
+        <div class="rail-foot"><span class="safe-dot"></span>Photos never leave this machine</div>
+      </aside>
+
+      <section class="preview-column">
+        <div class="preview-heading"><div><span class="eyebrow">LIVE PREVIEW</span><h2>Your cover, in progress</h2></div><button id="surprise" class="button button-amber">✦ Surprise me</button></div>
+        <div id="previewFrame" class="preview-frame"><canvas id="poster" aria-label="Poster preview canvas"></canvas><button id="coverReturn" class="cover-return" hidden>← Back to studio</button></div>
+        <div class="preview-hint"><span>Drag a panel to reframe · wheel to zoom · Shift-drag to swap</span><span id="selectionLabel">PANEL 01 / 07</span></div>
+        <div class="filmstrip-caption"><span>YOUR CAST · <b>8 SAMPLE FRAMES</b></span><span>DRAG A MARKER TO SET A MANUAL FACE ANCHOR</span></div>
       </section>
-      <section class="panel-section">
-        <div class="section-heading"><div><span class="eyebrow">COMPOSITION</span><h2>Layout</h2></div><button id="surpriseBtn" class="button accent small">✦ Surprise me</button></div>
-        <div id="layoutChoices" class="choice-grid layout-grid"></div>
-      </section>
-      <section class="panel-section">
-        <div class="section-heading"><div><span class="eyebrow">COLOR STORY</span><h2>Grade</h2></div></div>
-        <div id="gradeChoices" class="grade-grid"></div>
-        <label class="range-row"><span>Grade strength</span><output id="gradeOut">72%</output><input id="gradeRange" type="range" min="0" max="100" value="72"></label>
-      </section>
-      <section class="panel-section look-section">
-        <div class="section-heading"><div><span class="eyebrow">FINISH</span><h2>Look</h2></div></div>
-        <label class="range-row"><span>Poster ink</span><output id="inkOut">42%</output><input id="inkRange" type="range" min="0" max="100" value="42"></label>
-        <label class="range-row"><span>Halftone</span><output id="halftoneOut">18%</output><input id="halftoneRange" type="range" min="0" max="100" value="18"></label>
-        <label class="range-row"><span>Grain</span><output id="grainOut">16%</output><input id="grainRange" type="range" min="0" max="100" value="16"></label>
-        <label class="range-row"><span>Glow</span><output id="glowOut">34%</output><input id="glowRange" type="range" min="0" max="100" value="34"></label>
-        <label class="range-row"><span>Title size</span><output id="titleSizeOut">100%</output><input id="titleSizeRange" type="range" min="65" max="125" value="100"></label>
-      </section>
-    </aside>
-    <section class="stage">
-      <div class="stage-head"><div><span class="eyebrow">LIVE PREVIEW</span><h2>Your cover, your summer.</h2></div><span class="local-note"><i></i> Photos never leave this machine</span></div>
-      <div class="canvas-wrap" id="canvasWrap"><canvas id="posterCanvas" aria-label="Cover art preview. Drag panels to reframe photos; use the wheel to zoom."></canvas><div class="canvas-hint">Drag a panel to reframe · wheel to zoom · Shift-drag to swap</div><div class="busy-indicator" id="busyIndicator">Preparing your reel…</div></div>
-      <div class="stage-foot"><span id="selectedPanelLabel">Select a panel to edit its details</span><button id="resetPanelBtn" class="text-button">Reset selected crop</button></div>
-    </section>
-    <aside class="inspector">
-      <section class="panel-section caption-section"><div class="section-heading"><div><span class="eyebrow">THE BILLING</span><h2>Cover copy</h2></div></div>
-        <label class="field-label">TITLE<input id="titleInput" maxlength="32" value="PALM FEVER" placeholder="Your title"></label>
-        <label class="field-label">SCRIPT LINE<input id="subtitleInput" maxlength="48" value="one last summer"></label>
-        <label class="field-label">TAGLINE PILL<input id="taglineInput" maxlength="42" value="A CITY THAT NEVER COOLS"></label>
-        <div class="field-pair"><label class="field-label">QUOTE<input id="quoteInput" maxlength="60" value="“A wild ride under neon skies.”"></label><label class="field-label short-field">OUTLET<input id="outletInput" maxlength="24" value="THE SUNSET POST"></label></div>
-        <div class="field-pair"><label class="field-label short-field">TICKET<input id="ticketInput" maxlength="22" value="VOL. 1"></label><label class="field-label short-field">ENDING<input id="endingInput" maxlength="20" value="COMING SOON"></label></div>
-        <div class="toggle-grid"><label><input id="sealToggle" type="checkbox" checked><span>Gold seal</span></label><label><input id="barcodeToggle" type="checkbox" checked><span>Barcode</span></label><label><input id="billingToggle" type="checkbox" checked><span>Billing block</span></label><label><input id="quoteToggle" type="checkbox" checked><span>Quote bar</span></label><label><input id="palmToggle" type="checkbox" checked><span>Palm strip</span></label></div>
-      </section>
-      <section class="panel-section panel-edit-section"><div class="section-heading"><div><span class="eyebrow">SELECTED FRAME</span><h2>Panel details</h2></div></div>
-        <label class="field-label">ROLE TAG<input id="roleInput" maxlength="24" value="THE DRIVER"></label>
-        <label class="field-label">LOCATION · TIME<input id="locationInput" maxlength="34" value="OCEAN DRIVE · 6:42 PM"></label>
-        <div class="panel-tools"><button id="flipBtn" class="button quiet">⇋ Flip</button><button id="resetBtn" class="button quiet">Reset crop</button></div>
-        <p class="microcopy">Move the face marker to choose the crop anchor. It’s a manual marker, not face detection.</p>
-      </section>
-      <section class="export-card"><div class="export-title"><div><span class="eyebrow">READY FOR THE MARQUEE</span><h2>Export cover</h2></div><span class="export-icon">↗</span></div>
-        <label class="field-label size-label">SIZE<select id="sizeSelect"><option value="square">Square · 1080 × 1080</option><option value="portrait">Portrait · 1080 × 1350</option><option value="wide">Wide · 1920 × 1080</option></select></label>
-        <button id="exportBtn" class="button export-button">Export PNG <span>↗</span></button><button id="exportAllBtn" class="button all-button">Export all three sizes</button><small>High-resolution PNG · processed locally</small>
-      </section>
-    </aside>
-  </main>
-  <div id="helpOverlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="dialog-card"><button id="closeHelpBtn" class="icon-button close-button" aria-label="Close">×</button><span class="eyebrow">QUICK KEYS</span><h2 id="helpTitle">Keep the reel rolling.</h2><dl><dt>?</dt><dd>Show shortcuts</dd><dt>Ctrl / ⌘ + Z</dt><dd>Undo</dd><dt>Ctrl / ⌘ + Shift + Z</dt><dd>Redo</dd><dt>Escape</dt><dd>Close this panel</dd><dt>Drag / wheel</dt><dd>Reframe and zoom a photo</dd><dt>Shift + drag</dt><dd>Swap photos between panels</dd></dl><button id="doneHelpBtn" class="button accent">Got it</button></div></div>
-  <div id="toast" class="toast" aria-live="polite"></div>
-  <script type="module" src="/src/main.js"></script>
+
+      <aside class="rail editor-rail">
+        <section class="editor-section"><div class="section-heading compact"><span class="eyebrow">02 / THE STORY</span><h2>Cover copy</h2></div>
+          <label class="field-label" for="title">Main title</label><input id="title" class="text-field title-field" value="PALM FEVER" maxlength="36">
+          <label class="field-label" for="subtitle">Script line</label><input id="subtitle" class="text-field" value="one last summer" maxlength="50">
+          <label class="field-label" for="tagline">Tagline pill</label><input id="tagline" class="text-field" value="A CITY THAT NEVER COOLS" maxlength="58">
+          <div class="field-pair"><div><label class="field-label" for="quote">Quote bar</label><input id="quote" class="text-field" value="A wild ride under neon skies."></div><div><label class="field-label" for="outlet">Byline</label><input id="outlet" class="text-field" value="THE SUNSET POST"></div></div>
+          <div class="field-pair"><div><label class="field-label" for="ticket">Ticket badge</label><input id="ticket" class="text-field" value="VOL. 1"></div><div><label class="field-label" for="ending">Bottom stamp</label><input id="ending" class="text-field" value="COMING SOON"></div></div>
+          <div class="toggle-row"><label><input id="showQuote" type="checkbox" checked><span>Quote</span></label><label><input id="showSeal" type="checkbox" checked><span>Gold seal</span></label><label><input id="showBarcode" type="checkbox" checked><span>Barcode</span></label><label><input id="showBilling" type="checkbox" checked><span>Billing</span></label><label><input id="showPalm" type="checkbox" checked><span>Palm strip</span></label></div>
+        </section>
+
+        <section class="editor-section panel-editor"><div class="section-heading compact"><span class="eyebrow">03 / THE FRAME</span><h2>Panel details</h2></div>
+          <div class="panel-readout"><b id="panelPhoto">boulevard.jpg</b><span id="zoomValue">1.00×</span></div>
+          <div class="panel-actions"><button id="photoPrev" class="small-button" title="Previous photo">← Photo</button><button id="photoNext" class="small-button" title="Next photo">Photo →</button><button id="flip" class="small-button">Flip</button><button id="resetCrop" class="small-button">Reset crop</button></div>
+          <label class="field-label" for="panelZoom">Panel zoom</label><input id="panelZoom" type="range" min="1" max="4" step="0.01" value="1">
+          <div class="field-pair"><div><label class="field-label" for="role">Role tag</label><input id="role" class="text-field" value="THE DRIVER"></div><div><label class="field-label" for="location">Location / time</label><input id="location" class="text-field" value="OCEAN DRIVE · 6:42 PM"></div></div>
+          <p class="marker-note">Manual face marker: drag the small anchor on the selected frame.</p>
+        </section>
+
+        <section class="editor-section"><div class="section-heading compact"><span class="eyebrow">04 / THE CUT</span><h2>Layout</h2></div><div id="layoutPicker" class="layout-picker"></div></section>
+        <section class="editor-section"><div class="section-heading compact"><span class="eyebrow">05 / THE LIGHT</span><h2>Grade</h2></div><div id="gradePicker" class="grade-picker"></div></section>
+        <section class="editor-section sliders-section"><div class="section-heading compact"><span class="eyebrow">06 / THE PRINT</span><h2>Finish</h2></div>
+          <label class="range-label" for="gradeStrength">Grade strength <output id="gradeStrengthOutput">72</output></label><input id="gradeStrength" type="range" min="0" max="100" value="72">
+          <label class="range-label" for="ink">Poster ink <output id="inkOutput">42</output></label><input id="ink" type="range" min="0" max="100" value="42">
+          <label class="range-label" for="halftone">Halftone <output id="halftoneOutput">18</output></label><input id="halftone" type="range" min="0" max="100" value="18">
+          <label class="range-label" for="grain">Film grain <output id="grainOutput">16</output></label><input id="grain" type="range" min="0" max="100" value="16">
+          <label class="range-label" for="glow">Neon glow <output id="glowOutput">34</output></label><input id="glow" type="range" min="0" max="100" value="34">
+          <label class="range-label" for="titleSize">Title size <output id="titleSizeOutput">100%</output></label><input id="titleSize" type="range" min="70" max="130" value="100">
+        </section>
+        <section class="export-section"><div><span class="eyebrow">READY WHEN YOU ARE</span><h2>Export PNG</h2><p>Square · portrait · wide</p></div><button id="exportAll" class="button button-export">Export all three sizes <span>↗</span></button></section>
+      </aside>
+    </main>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+  <dialog id="shortcuts" class="shortcuts-dialog"><button id="closeShortcuts" class="dialog-close" aria-label="Close">×</button><span class="eyebrow">QUICK KEYS</span><h2>Studio shortcuts</h2><dl><dt>Drag</dt><dd>Pan a panel crop</dd><dt>Wheel</dt><dd>Zoom the selected panel</dd><dt>Shift + drag</dt><dd>Swap photos between panels</dd><dt>F</dt><dd>Flip selected photo</dd><dt>R</dt><dd>Reset selected crop</dd><dt>Ctrl + Z</dt><dd>Undo</dd><dt>Ctrl + Shift + Z</dt><dd>Redo</dd><dt>S</dt><dd>Surprise me</dd></dl></dialog>
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>
